@@ -41,9 +41,11 @@ export class TaskService {
     }
 
     update(id: number, taskDto: Task): Task {
-        this.tasks.map( task =>{
-            task.id === id ? task = taskDto : task
+        this.tasks = this.tasks.map( task => {
+            return task.id == id ? 
+                task={id:task.id, ...taskDto}
+                : task;
         });
-        return  this.getById(id);
+        return {id, ...taskDto};
     }
 }
