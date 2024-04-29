@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Post, Put, Query, Req, Res } from '@nestjs/common';
 
 import { Response } from 'express'; 
 
 import { TaskService } from './task.service';
 import { Task } from './task.interface';
+import { Priority } from './priority.enum';
 
 
 @Controller('/api/tasks')
@@ -17,8 +18,15 @@ export class TaskController {
     }
 
     @Get('/:id')
-    getTask(@Param('id') id: number, @Res() res: Response){
+    getTask(@Param('id', ParseIntPipe) id: number, @Res() res: Response){
         return res.status(200).send(this.taskService.getById(id));
+    }
+
+    @Get('/query')
+    getTaskByPriority(@Query() priority: string, @Res() res: Response){
+        console.log(priority)
+        return res.status(HttpStatus.OK)
+            .send(this.taskService.getByPriority(priority));
     }
 
     @Post()
@@ -33,7 +41,7 @@ export class TaskController {
     }
 
     @Put('/:id')
-    updateTask(@Param('id') id: number, @Body() taskDto: Task, @Res() res: Response){
+    updateTask(@Param('id', ParseIntPipe) id: number, @Body() taskDto: Task, @Res() res: Response){
         return res.status(HttpStatus.CREATED)
             .send(this.taskService.update(id, taskDto));
     }

@@ -5,7 +5,7 @@ import { Priority } from './priority.enum';
 @Injectable()
 export class TaskService {
 
-    private tasks:Task[] = [
+    tasks:Task[] = [
         {
             id: 1,
             name: 'Comprar pan',
@@ -17,6 +17,18 @@ export class TaskService {
             name: 'Ir al medico',
             priority: Priority.HIGH,
             desciption: 'Pedir la receta de medicamentos'
+        },
+        {
+            id: 3,
+            name: 'Salir a correr',
+            priority: Priority.HIGH,
+            desciption: 'Salir a correr ocn amigos'
+        },
+        {
+            id: 4,
+            name: 'Estudiar',
+            priority: Priority.LOW,
+            desciption: 'Estudiar para el parcial'
         }
     ];
 
@@ -24,8 +36,14 @@ export class TaskService {
         return this.tasks;
     }
 
-    getById(id: number):Task{
+    getById(id: number): Task{
         return this.tasks.find(task => task.id == id) ;
+    }
+
+    getByPriority(priority: string): Task[] | void {
+        return this.tasks.filter(task => {
+            task.priority == 1;
+        })
     }
 
     create(taskDto: Task): void{
@@ -36,7 +54,7 @@ export class TaskService {
         );
     }
 
-    delete(id: number){
+    delete(id: number): void{
         this.tasks = this.tasks.filter( t => t.id != id );
     }
 
@@ -46,6 +64,6 @@ export class TaskService {
                 task={id:task.id, ...taskDto}
                 : task;
         });
-        return {id, ...taskDto};
+        return this.getById(id);
     }
 }
